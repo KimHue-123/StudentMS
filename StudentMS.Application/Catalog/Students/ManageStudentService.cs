@@ -35,11 +35,6 @@ namespace StudentMS.Application.Catalog.Students
 
         public async Task<PageResultBase<StudentVM>> GetAllPaging(PagingRequestBase request)
         {
-            //var query = from s in _context.Students
-            //            join g in _context.Grades on s.Id equals g.StudentId
-            //            join sj in _context.Subjects on g.SubjectId equals sj.Id
-            //            group s by new { s.Id, s.Name, s.PhoneNumber, s.Dob, s.Sex, s.Address} into gr
-            //            select new {gr, count = gr.Count()};
             var result = new List<StudentVM>();
             var query = _context.Students.AsQueryable();
             if (!string.IsNullOrEmpty(request.KeyWord))
@@ -53,10 +48,7 @@ namespace StudentMS.Application.Catalog.Students
                                     .ToListAsync();
             foreach (var student in data)
             {
-                //var studentVM = new StudentVM(student);
                 student.Average = CalculateStudentAverage(student.Id);
-                //studentVM.Average = CalculateStudentAverage(student.Id);
-                //result.Add(studentVM);
             }
             return new PageResultBase<StudentVM>()
             {
@@ -65,49 +57,6 @@ namespace StudentMS.Application.Catalog.Students
                 PageSize = request.PageSize,
                 TotalRecord = query.Count()
             };
-
-            //var query = _context.Grades.Include(x => x.Student)
-            //                           .Include(y => y.Subject)
-            //                           .GroupBy(x => new {x.Student.Id, x.Student.Name, x.Student.Sex})
-            //                           .Select(x => new
-            //                            {
-            //                                Id = x.Key.Id,
-            //                                Name = x.Key.Name,
-            //                                Sex = x.Key.Sex,
-            //                                Count = x.Count()
-            //                            })
-            //                           .ToList();
-
-
-            //if (!String.IsNullOrEmpty(request.KeyWord))
-            //{
-            //    query = query.Where(x => x.gr.Key.Name.Contains(request.KeyWord));
-            //}
-            //if (request.PageIndex == 0)
-            //{
-            //    request.PageIndex = 1;
-            //}
-            //var data = await query.Skip((request.PageIndex - 1)*request.PageSize)
-            //                    .Take(request.PageSize)
-            //                    .Select(x => new StudentVM()
-            //                    {
-            //                        Id = x.gr.Key.Id,
-            //                        Name = x.gr.Key.Name,
-            //                        PhoneNumber = x.gr.Key.PhoneNumber,
-            //                        Dob = x.gr.Key.Dob,
-            //                        Sex = x.gr.Key.Sex,
-            //                        Address = x.gr.Key.Address,
-            //                        Average = x.count < 3 ? 0 : Average(x.gr.Key.Id)
-            //                    }).ToListAsync();
-            //int totalRow = await query.CountAsync();
-            //var result = new PageResultBase<StudentVM>()
-            //{
-            //    Items = data,
-            //    TotalRecord = totalRow,
-            //    PageIndex = request.PageIndex,
-            //    PageSize = request.PageSize
-            //};
-            //return new PageResultBase<StudentVM>();
         }
         private float CalculateStudentAverage(int studentId)
         {

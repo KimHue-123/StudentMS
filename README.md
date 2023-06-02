@@ -3,3 +3,4 @@
 - Create new student
 - Delete student
 - Filter student by name
+- Edit
